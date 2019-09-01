@@ -1,0 +1,1 @@
+﻿Get-Service | ? {$_.Status -eq "running"}

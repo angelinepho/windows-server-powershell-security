@@ -1,0 +1,4 @@
+﻿Get-LocalUser | ? {$_.Enabled -eq "True"} | ForEach-Object {}{$sid = $_.sid; $name = $_.Name; Get-LocalGroupMember -Group "Users" | ? {$_.sid -eq $sid} | ForEach-Object {}{$Password = Read-Host -AsSecureString 'Enter a password for' $name}{$UserAccount = Get-LocalUser -Name $name}{$UserAccount | Set-LocalUser -Password $Password}}
+Get-LocalUser | ? {$_.Enabled -eq "True"} | ForEach-Object {}{$sid = $_.sid; $name = $_.Name; Get-LocalGroupMember -Group "Administrators" | ? {$_.sid -eq $sid} | ForEach-Object {}{$Password = Read-Host -AsSecureString 'Enter an admin password for' $name}{$UserAccount = Get-LocalUser -Name $name}{$UserAccount | Set-LocalUser -Password $Password}}
+$users = Get-WmiObject -Class Win32_UserAccount -Filter "LocalAccount=True"
+foreach ($user in $users) {if ($user.Name -eq {Get-LocalUser | ? {$_.Enabled -eq "True"}}) {ForEach-Object {}{$Password = Read-Host -AsSecureString 'Enter a password for' $user.Name}{net user $user.Name $Password}}}
